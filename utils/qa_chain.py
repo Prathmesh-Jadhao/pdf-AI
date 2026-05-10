@@ -23,7 +23,7 @@ def ask_question(vector_db, query):
     # load local LLM
     # llm = Ollama(model = "llama3")
     llm = ChatGroq(
-        model="llama3-8b-8192",
+        model="llama-3.1-8b-instant",
         api_key=os.getenv("GROQ_API_KEY")
     )
 
