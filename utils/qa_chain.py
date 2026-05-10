@@ -4,14 +4,21 @@ import os
 
 def ask_question(vector_db, query):
     #search relevant chunks
-    docs = vector_db.similarity_search(query, k=3)
+    docs = vector_db.max_marginal_relevance_search(
+    query,
+    k=5,
+    fetch_k=10
+)
 
     # combine retrieved text
     context = "\n".join([doc.page_content for doc in docs])
 
     #prompt
     prompt = f"""
-    Answer the question using only the content below.
+    You are a helpful assistant.
+    Answer ONLY using the provided context.
+    If the answer is not in the context, say:
+    "I could not find that in the uploaded documents."
 
     Context:
     {context}
