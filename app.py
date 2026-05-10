@@ -19,6 +19,18 @@ if "vector_db" not in st.session_state:
 
 # sidebar reset
 with st.sidebar:
+    st.title("Settings")
+
+    mode = st.selectbox(
+        "Choose Mode",
+        [
+            "Plicy Analyzer",
+            "Contract Review",
+            "Study Assistant",
+            "Resume Matcher",
+            "Research Assistant"
+        ]
+    )
     if st.button("Reset Chat"):
         st.session_state.messages = []
         st.session_state.vector_db = None
@@ -75,7 +87,8 @@ if st.session_state.vector_db is not None:
             with st.spinner("Thinking..."):
                 answer, docs = ask_question(
                     st.session_state.vector_db,
-                    query
+                    query,
+                    mode
                 )
                 st.write(answer)
 
