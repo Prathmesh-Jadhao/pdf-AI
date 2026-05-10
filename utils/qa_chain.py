@@ -45,9 +45,10 @@ You are an expert tutor.
 Give:
 1. Easy explanation
 2. Key points
-3. Important questions
-4. MCQs
-5. Revision tips
+3. Real life example.
+4. Important questions and answers
+5. MCQs
+6. Revision tips
 
 Context:
 {context}

@@ -31,10 +31,46 @@ with st.sidebar:
             "Research Assistant"
         ]
     )
-    if st.button("Reset Chat"):
-        st.session_state.messages = []
-        st.session_state.vector_db = None
-        st.rerun()
+
+    st.subheader("⚡ Quick Actions")
+
+quick_actions = {
+    "Policy Analyzer": [
+        "Summarize this policy",
+        "List hidden clauses",
+        "Compare benefits and exclusions"
+    ],
+    "Contract Review": [
+        "Highlight risky clauses",
+        "Summarize obligations",
+        "What should I negotiate?"
+    ],
+    "Study Assistant": [
+        "Summarize this chapter",
+        "Generate 10 MCQs",
+        "Create revision notes"
+    ],
+    "Resume Matcher": [
+        "Give ATS score",
+        "List missing skills",
+        "Suggest improvements"
+    ],
+    "Research Assistant": [
+        "Summarize paper",
+        "Extract methodology",
+        "List key findings"
+    ]
+}
+
+selected_action = st.selectbox(
+    "Choose an action",
+    ["Custom question"] + quick_actions[mode]
+)
+
+if st.button("Reset Chat"):
+    st.session_state.messages = []
+    st.session_state.vector_db = None
+    st.rerun()
 
 
 # multiple upload
@@ -73,7 +109,15 @@ for msg in st.session_state.messages:
 
 # chat
 if st.session_state.vector_db is not None:
-    query = st.chat_input("Ask a question")
+    user_input = st.chat_input("Ask a question")
+
+    query = None
+
+    if selected_action != "Custom question":
+        query = selected_action
+
+    elif user_input:
+        query = user_input
 
     if query:
         st.session_state.messages.append(
