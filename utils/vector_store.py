@@ -12,7 +12,7 @@ def create_vector_store(text):
     chunks = splitter.split_text(text)
 
     embeddings = HuggingFaceEmbeddings(
-        model_name = "intfloat/multilingual-e5-base"
+        model_name = "BAAI/bge-base-en-v1.5"
     )
 
     vector_db = FAISS.from_texts(chunks,embeddings)
