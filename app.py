@@ -4,12 +4,18 @@ from utils.pdf_reader import extract_text
 from utils.vector_store import create_vector_store
 from utils.qa_chain import ask_question
 
-st.set_page_config(page_title="Chat with PDF", page_icon="📄")
 
-st.title("📄 Chat with PDF")
-st.write("Upload one or more PDFs and ask questions.")
+# Page config
+st.set_page_config(
+    page_title="DocuMind AI",
+    page_icon="🧠"
+)
 
-# session state
+st.title("🧠 DocuMind AI")
+st.write("Understand. Compare. Decide.")
+
+
+# ---------------- SESSION STATE ----------------
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -17,9 +23,9 @@ if "vector_db" not in st.session_state:
     st.session_state.vector_db = None
 
 
-# sidebar reset
+# ---------------- SIDEBAR ----------------
 with st.sidebar:
-    st.title("Settings")
+    st.title("⚙️ Settings")
 
     mode = st.selectbox(
         "Choose Mode",
@@ -62,25 +68,26 @@ with st.sidebar:
         ]
     }
 
-selected_action = st.selectbox(
-    "Choose an action",
-    ["Custom question"] + quick_actions[mode]
-)
+    selected_action = st.selectbox(
+        "Choose an action",
+        ["Custom question"] + quick_actions[mode]
+    )
 
-if st.button("Reset Chat"):
-    st.session_state.messages = []
-    st.session_state.vector_db = None
-    st.rerun()
+    run_quick_action = st.button("Run Quick Action")
+
+    if st.button("Reset Chat"):
+        st.session_state.messages = []
+        st.session_state.vector_db = None
+        st.rerun()
 
 
-# multiple upload
+# ---------------- FILE UPLOAD ----------------
 uploaded_files = st.file_uploader(
-    "Upload PDFs",
+    "Upload PDF(s)",
     type="pdf",
     accept_multiple_files=True
 )
 
-# only process AFTER files are uploaded
 if uploaded_files and st.session_state.vector_db is None:
     try:
         with st.spinner("Processing PDFs..."):
@@ -95,31 +102,39 @@ if uploaded_files and st.session_state.vector_db is None:
                 st.error("No readable text found in uploaded PDFs.")
             else:
                 st.session_state.vector_db = create_vector_store(full_text)
-                st.success(f"{len(uploaded_files)} PDFs processed successfully!")
+                st.success(
+                    f"{len(uploaded_files)} PDF(s) processed successfully!"
+                )
 
     except Exception as e:
-        st.error(str(e))
+        st.error(f"Error: {str(e)}")
 
 
-# show old chat
+# ---------------- CHAT HISTORY ----------------
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
 
-# chat
-if st.session_state.vector_db is not None:
+# ---------------- CHAT ----------------
+if st.session_state.vector_db is None:
+    st.info("👆 Upload PDF(s) to get started")
+
+else:
     user_input = st.chat_input("Ask a question")
 
     query = None
 
-    if selected_action != "Custom question":
+    # quick action runs only once
+    if run_quick_action and selected_action != "Custom question":
         query = selected_action
 
+    # custom typed question
     elif user_input:
         query = user_input
 
     if query:
+        # show user msg
         st.session_state.messages.append(
             {"role": "user", "content": query}
         )
@@ -127,6 +142,7 @@ if st.session_state.vector_db is not None:
         with st.chat_message("user"):
             st.write(query)
 
+        # get AI response
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 answer, docs = ask_question(
@@ -134,14 +150,16 @@ if st.session_state.vector_db is not None:
                     query,
                     mode
                 )
+
                 st.write(answer)
 
-                with st.expander("View source chunks"):
+                # source chunks
+                with st.expander("📄 View source chunks"):
                     for i, doc in enumerate(docs, 1):
                         st.markdown(f"**Chunk {i}:**")
                         st.write(doc.page_content[:500] + "...")
 
-
+        # save response
         st.session_state.messages.append(
             {"role": "assistant", "content": answer}
         )
