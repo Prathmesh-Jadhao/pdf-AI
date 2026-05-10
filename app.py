@@ -24,7 +24,7 @@ with st.sidebar:
     mode = st.selectbox(
         "Choose Mode",
         [
-            "Plicy Analyzer",
+            "Policy Analyzer",
             "Contract Review",
             "Study Assistant",
             "Resume Matcher",
