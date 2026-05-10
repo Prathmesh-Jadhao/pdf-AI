@@ -34,33 +34,33 @@ with st.sidebar:
 
     st.subheader("⚡ Quick Actions")
 
-quick_actions = {
-    "Policy Analyzer": [
-        "Summarize this policy",
-        "List hidden clauses",
-        "Compare benefits and exclusions"
-    ],
-    "Contract Review": [
-        "Highlight risky clauses",
-        "Summarize obligations",
-        "What should I negotiate?"
-    ],
-    "Study Assistant": [
-        "Summarize this chapter",
-        "Generate 10 MCQs",
-        "Create revision notes"
-    ],
-    "Resume Matcher": [
-        "Give ATS score",
-        "List missing skills",
-        "Suggest improvements"
-    ],
-    "Research Assistant": [
-        "Summarize paper",
-        "Extract methodology",
-        "List key findings"
-    ]
-}
+    quick_actions = {
+        "Policy Analyzer": [
+            "Summarize this policy",
+            "List hidden clauses",
+            "Compare benefits and exclusions"
+        ],
+        "Contract Review": [
+            "Highlight risky clauses",
+            "Summarize obligations",
+            "What should I negotiate?"
+        ],
+        "Study Assistant": [
+            "Summarize this chapter",
+            "Generate 10 MCQs",
+            "Create revision notes"
+        ],
+        "Resume Matcher": [
+            "Give ATS score",
+            "List missing skills",
+            "Suggest improvements"
+        ],
+        "Research Assistant": [
+            "Summarize paper",
+            "Extract methodology",
+            "List key findings"
+        ]
+    }
 
 selected_action = st.selectbox(
     "Choose an action",
