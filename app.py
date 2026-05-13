@@ -7,11 +7,11 @@ from utils.qa_chain import ask_question
 
 # Page config
 st.set_page_config(
-    page_title="DocuMind AI",
+    page_title="DocuAI",
     page_icon="🧠"
 )
 
-st.title("🧠 DocuMind AI")
+st.title("DocuAI")
 st.write("Understand. Compare. Decide.")
 
 
